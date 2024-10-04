@@ -6,6 +6,7 @@
 - [Preparation](#preparation)
 - [Django Model](#django-model)
     - [Building Multiple Models](#building-multiple-models)
+    - [DateTimeField Options](#datetimefield-options)
 
 ### Preparation
 - Create project 
@@ -65,5 +66,19 @@
         end_date=models.DateTimeField()
         name=models.CharField(max_length=100)
     ```
+
+[⬆️ Go to top](#context)
+
+#### DateTimeField Options
+- In created `auto_now_add` is used
+- In updated `auto_now` is used
+    ```py
+    class product_model(models.Model):
+        ...
+        created_at=models.DateTimeField(auto_now_add=True,editable=False)
+        updated_at=models.DateTimeField(auto_now=True,editable=False)
+        ...
+    ```
+    - `editable=False` is used to prevent appearing in form 
 
 [⬆️ Go to top](#context)
