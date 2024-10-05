@@ -13,6 +13,19 @@ class product_model(models.Model):
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     is_active = models.BooleanField()
 
+    IN_STOCK = "IS"
+    OUT_OF_STOCK = "OOS"
+    BACKORDERED = "BO"
+    STOCK_STATUS = {
+        IN_STOCK: "In Stock",
+        OUT_OF_STOCK: "Out of Stock",
+        BACKORDERED: "Back Ordered",
+    }
+    stock_status = models.CharField(
+        max_length=3,
+        choices=STOCK_STATUS,
+        default=OUT_OF_STOCK,
+    )
 
 class product_line_model(models.Model):
     price = models.DecimalField()

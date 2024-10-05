@@ -7,6 +7,7 @@
 - [Django Model](#django-model)
     - [Building Multiple Models](#building-multiple-models)
     - [DateTimeField Options](#datetimefield-options)
+    - [Choices Field](#choices-field)
 
 ### Preparation
 - Create project 
@@ -80,5 +81,27 @@
         ...
     ```
     - `editable=False` is used to prevent appearing in form 
+
+[⬆️ Go to top](#context)
+
+#### Choices Field
+- Limiting a valid value that a particular field can have
+    ```py
+    class product_model(models.Model):
+        ...
+        IN_STOCK = "IS"
+        OUT_OF_STOCK = "OOS"
+        BACKORDERED = "BO"
+        STOCK_STATUS = {
+            IN_STOCK: "In Stock",
+            OUT_OF_STOCK: "Out of Stock",
+            BACKORDERED: "Back Ordered",
+        }
+        stock_status = models.CharField(
+            max_length=3,
+            choices=STOCK_STATUS,
+            default=OUT_OF_STOCK,
+        )
+    ```
 
 [⬆️ Go to top](#context)
