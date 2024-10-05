@@ -8,6 +8,7 @@
     - [Building Multiple Models](#building-multiple-models)
     - [DateTimeField Options](#datetimefield-options)
     - [Choices Field](#choices-field)
+    - [Required, Null, Blank and Default](#required-null-blank-and-default)
 
 ### Preparation
 - Create project 
@@ -103,5 +104,55 @@
             default=OUT_OF_STOCK,
         )
     ```
+
+[⬆️ Go to top](#context)
+
+#### Required, Null, Blank and Default
+- Based on the use cases for each field `unique`, `null`, `blank` and `default` are set below
+    ```py
+    from django.db import models
+
+    class ProductModel(models.Model):
+        pid = models.CharField(max_length=255, unique=True)  # Unique identifier, required
+        name = models.CharField(max_length=100, blank=False)  # Required field, cannot be blank
+        slug = models.SlugField(unique=True)  # Required field, slug should be unique
+        description = models.TextField(blank=True, null=True)  # Optional field, can be blank or null
+        is_digital = models.BooleanField(default=False)  # Defaults to False, required field
+        created_at = models.DateTimeField(auto_now_add=True, editable=False)  # Automatically set on creation
+        updated_at = models.DateTimeField(auto_now=True, editable=False)  # Automatically set on update
+        is_active = models.BooleanField(default=True)  # Defaults to True, required field
+
+        IN_STOCK = "IS"
+        OUT_OF_STOCK = "OOS"
+        BACKORDERED = "BO"
+        STOCK_STATUS = {
+            IN_STOCK: "In Stock",
+            OUT_OF_STOCK: "Out of Stock",
+            BACKORDERED: "Back Ordered",
+        }
+        stock_status = models.CharField(
+            max_length=3,
+            choices=STOCK_STATUS.items(),  # Use items() to get (value, label) pairs
+            default=OUT_OF_STOCK,
+        )
+
+        class Meta:
+            verbose_name = "Product"
+            verbose_name_plural = "Products"
+
+        def __str__(self):
+            return self.name
+    ```
+1. **`blank`**: 
+   - Used for validation at the form level. If set to `True`, it means the field is allowed to be empty when submitting a form. For example, `description` is optional, so it's set as `blank=True`.
+
+2. **`null`**:
+   - Used for database storage. If set to `True`, it allows the field to be stored as `NULL` in the database. In the case of `description`, it can be either blank or null.
+
+3. **`unique`**:
+   - Ensures that each value in the field is unique across all entries. This is used for `pid` and `slug` to prevent duplication.
+
+4. **`default`**:
+   - Sets a default value for the field if none is provided. For instance, `is_digital` defaults to `False`, and `is_active` defaults to `True`.
 
 [⬆️ Go to top](#context)
