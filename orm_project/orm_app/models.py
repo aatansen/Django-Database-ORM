@@ -61,7 +61,7 @@ class product_image_model(models.Model):
 
 class category_model(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     is_active = models.BooleanField(default=True)
 
 
