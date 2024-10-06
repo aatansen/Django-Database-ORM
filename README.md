@@ -9,6 +9,7 @@
     - [DateTimeField Options](#datetimefield-options)
     - [Choices Field](#choices-field)
     - [Required, Null, Blank and Default](#required-null-blank-and-default)
+    - [Custom Primary Key](#custom-primary-key)
 
 ### Preparation
 - Create project 
@@ -154,5 +155,15 @@
 
 4. **`default`**:
    - Sets a default value for the field if none is provided. For instance, `is_digital` defaults to `False`, and `is_active` defaults to `True`.
+
+[⬆️ Go to top](#context)
+
+#### Custom Primary Key
+- A custom primary key can be defined as below  
+    ```py
+    class seasonal_event_model(models.Model):
+        id = models.BigAutoField(primary_key=True)
+        ...
+    ```
 
 [⬆️ Go to top](#context)
