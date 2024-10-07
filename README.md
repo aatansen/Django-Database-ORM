@@ -10,6 +10,7 @@
     - [Choices Field](#choices-field)
     - [Required, Null, Blank and Default](#required-null-blank-and-default)
     - [Custom Primary Key](#custom-primary-key)
+    - [Making a Relationship](#making-a-relationship)
 
 ### Preparation
 - Create project 
@@ -165,5 +166,35 @@
         id = models.BigAutoField(primary_key=True)
         ...
     ```
+
+#### Making a Relationship
+- Product Table
+    | id  | name   | slug | ... |
+    |-----|--------|------|-----|
+    | 1   | Shoe 1 | ...  | ... |
+
+- Product Line Table
+    | id  | price | size | colour |
+    |-----|-------|------|--------|
+    | 1   | 10    | 4    | red    |
+    | 2   | 10    | 5    | blue   |
+    | 3   | 10    | 6    | green  |
+
+- Relationship Table (Product and ProductLine)
+    | Product  | ProductLine |
+    |----------|-------------|
+    | 1        | M           |
+    | 1        | 1           |
+    | Final    | M           |
+    > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
+
+1. **Product Table** stores basic information about a product (e.g., name, slug).
+2. **Product Line Table** contains variations or detailed information about specific product versions (e.g., price, size, color).
+3. The relationship between **Product** and **Product Line**:
+   - A **product** can have multiple **product lines** (1:M). For example, "Shoe 1" can come in various sizes and colors, which are represented in the Product Line table.
+   - **Product Line** is linked to a single **product**, meaning each variation (size, color) corresponds to only one product (M:1).
+4. In Django:
+   - The **Product Line** would contain a **ForeignKey** field pointing to the **Product** table, indicating a many-to-one relationship.
+   - If **Product** were to resolve to many instances of **ProductLine**, the ForeignKey would be on the Product Line side, since multiple lines correspond to one product.
 
 [⬆️ Go to top](#context)
