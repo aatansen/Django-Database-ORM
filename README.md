@@ -167,6 +167,8 @@
         ...
     ```
 
+[⬆️ Go to top](#context)
+
 #### Making a Relationship
 - Product Table
     | id  | name   | slug | ... |
@@ -181,11 +183,11 @@
     | 3   | 10    | 6    | green  |
 
 - Relationship Table (Product and ProductLine)
-    | Product  | ProductLine |
-    |----------|-------------|
-    | 1        | M           |
-    | 1        | 1           |
-    | Final    | M           |
+    |          | Product  | ProductLine |
+    |----------|----------|-------------|
+    |          | 1        | M           |
+    |          | 1        | 1           |
+    |**Final** | 1        | M           |
     > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
 1. **Product Table** stores basic information about a product (e.g., name, slug).
@@ -196,5 +198,13 @@
 4. In Django:
    - The **Product Line** would contain a **ForeignKey** field pointing to the **Product** table, indicating a many-to-one relationship.
    - If **Product** were to resolve to many instances of **ProductLine**, the ForeignKey would be on the Product Line side, since multiple lines correspond to one product.
+
+- Another example of Product and Category
+    |          | Product  | Category    |
+    |----------|----------|-------------|
+    |          | 1        | 1           |
+    |          | M        | 1           |
+    |**Final** | M        | 1           |
+    > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
 [⬆️ Go to top](#context)
