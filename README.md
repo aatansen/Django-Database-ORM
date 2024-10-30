@@ -7,6 +7,7 @@
 - [Context](#context)
   - [Preparation](#preparation)
   - [Django Model](#django-model)
+    - [Model Structure](#model-structure)
     - [Building Multiple Models](#building-multiple-models)
     - [DateTimeField Options](#datetimefield-options)
     - [Choices Field](#choices-field)
@@ -30,9 +31,97 @@
     ]
     ```
 
-[⬆️ Go to top](#context)
+[⬆️ Go to Context](#context)
 
 ### Django Model
+
+#### Model Structure
+
+```mermaid
+erDiagram
+    Product {
+        BigAutoField id
+        CharField pid
+        CharField name
+        SlugField slug
+        TextField description
+        BooleanField is_digital
+        DateTimeField created_at
+        DateTimeField updated_at
+        BooleanField is_active
+        CharField stock_status
+    }
+
+    ProductImage {
+        BigAutoField id
+        CharField name
+        CharField alternative_text
+        ImageField url
+        IntegerField order
+    }
+
+    ProductLine {
+        BigAutoField id
+        DecimalField price
+        UUID sku
+        IntegerField stock_qty
+        BooleanField is_active
+        IntegerField order
+        FloatField weight
+    }
+
+    Product_ProductType {
+        BigAutoField id
+    }
+
+    Category {
+        BigAutoField id
+        CharField name
+        SlugField slug
+        BooleanField is_active
+    }
+
+    Seasonal_Events {
+        BigAutoField id
+        DateTimeField start_date
+        DateTimeField end_date
+        CharField name
+    }
+
+    Attribute {
+        BigAutoField id
+        CharField name
+        TextField description
+    }
+
+    AttributeValue {
+        BigAutoField id
+        CharField attribute_value
+    }
+
+    ProductLine_AttributeValue {
+        BigAutoField id
+    }
+
+    ProductType {
+        BigAutoField id
+        CharField name
+    }
+
+    Category ||--o{ Product : "category_id"
+    Seasonal_Events ||--o{ Product : "seasonal_event_id"
+    ProductLine ||--o{ ProductImage : "product_line_id"
+    Product ||--o{ ProductLine : "product_id"
+    Product ||--o{ Product_ProductType : "product_id"
+    ProductType ||--o{ Product_ProductType : "product_type_id"
+    AttributeValue ||--o{ ProductLine_AttributeValue : "attribute_value_id"
+    ProductLine ||--o{ ProductLine_AttributeValue : "product_line_id"
+    Attribute ||--o{ AttributeValue : "attribute_id"
+    Category ||--o{ Category : "parent_id"
+    ProductType ||--o{ ProductType : "parent_id"
+```
+
+[⬆️ Go to Context](#context)
 
 #### Building Multiple Models
 
@@ -78,7 +167,7 @@
       name=models.CharField(max_length=100)
   ```
 
-[⬆️ Go to top](#context)
+[⬆️ Go to Context](#context)
 
 #### DateTimeField Options
 
@@ -95,7 +184,7 @@
 
   - `editable=False` is used to prevent appearing in form
 
-[⬆️ Go to top](#context)
+[⬆️ Go to Context](#context)
 
 #### Choices Field
 
@@ -117,9 +206,9 @@
           choices=STOCK_STATUS,
           default=OUT_OF_STOCK,
       )
-    ```
+  ```
 
-[⬆️ Go to top](#context)
+[⬆️ Go to Context](#context)
 
 #### Required, Null, Blank and Default
 
@@ -172,7 +261,7 @@
 4. **`default`**:
    - Sets a default value for the field if none is provided. For instance, `is_digital` defaults to `False`, and `is_active` defaults to `True`.
 
-[⬆️ Go to top](#context)
+[⬆️ Go to Context](#context)
 
 #### Custom Primary Key
 
@@ -184,7 +273,7 @@
       ...
   ```
 
-[⬆️ Go to top](#context)
+[⬆️ Go to Context](#context)
 
 #### Making a Relationship
 
@@ -251,4 +340,4 @@
 
     > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
-[⬆️ Go to top](#context)
+[⬆️ Go to Context](#context)
