@@ -14,6 +14,7 @@
     - [Required, Null, Blank and Default](#required-null-blank-and-default)
     - [Custom Primary Key](#custom-primary-key)
     - [Making a Relationship](#making-a-relationship)
+    - [Creating Foreign Keys](#creating-foreign-keys)
 
 ### Preparation
 
@@ -339,5 +340,12 @@ erDiagram
     |**Final** | M            | 1              |
 
     > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
+
+[⬆️ Go to Context](#context)
+
+#### Creating Foreign Keys
+
+- Now let's add foreign keys in our model
+- 
 
 [⬆️ Go to Context](#context)
