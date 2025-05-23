@@ -346,6 +346,6 @@ erDiagram
 #### Creating Foreign Keys
 
 - Now let's add foreign keys in our model
-- 
+-
 
 [⬆️ Go to Context](#context)
