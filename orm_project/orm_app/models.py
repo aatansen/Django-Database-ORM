@@ -3,7 +3,7 @@ import uuid
 
 
 # Create your models here.
-class product_model(models.Model):
+class ProductModel(models.Model):
     pid = models.CharField(max_length=255, unique=True)  # Unique identifier, required
     name = models.CharField(
         max_length=100, blank=False
@@ -42,30 +42,35 @@ class product_model(models.Model):
     def __str__(self):
         return self.name
 
+    category=models.ForeignKey('CategoryModel',on_delete=models.CASCADE)
+    seasonal_event=models.ForeignKey('SeasonalEventModel',on_delete=models.CASCADE)
 
-class product_line_model(models.Model):
+
+class ProductLineModel(models.Model):
     price = models.DecimalField()
     sku = models.UUIDField(default=uuid.uuid4)
     stock_qty = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     order = models.IntegerField()
     weight = models.FloatField()
+    product=models.ForeignKey(ProductModel,on_delete=models.CASCADE)
 
 
-class product_image_model(models.Model):
+class ProductImageModel(models.Model):
     name = models.CharField(max_length=100)
     alternative_text = models.CharField(max_length=100)
     url = models.ImageField()
     order = models.IntegerField()
+    product_line=models.ForeignKey(ProductLineModel,on_delete=models.CASCADE)
 
 
-class category_model(models.Model):
+class CategoryModel(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     is_active = models.BooleanField(default=True)
 
 
-class seasonal_event_model(models.Model):
+class SeasonalEventModel(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     name = models.CharField(max_length=100)

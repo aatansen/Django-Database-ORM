@@ -25,12 +25,12 @@
   - `py manage.py startapp orm_app`
 - Add app in `INSTALLED_APPS`
 
-    ```py
-    INSTALLED_APPS = [
-        ...
-        'orm_app',
-    ]
-    ```
+  ```py
+  INSTALLED_APPS = [
+      ...
+      'orm_app',
+  ]
+  ```
 
 [⬆️ Go to Context](#context)
 
@@ -250,17 +250,17 @@ erDiagram
           return self.name
   ```
 
-1. **`blank`**:
-   - Used for validation at the form level. If set to `True`, it means the field is allowed to be empty when submitting a form. For example, `description` is optional, so it's set as `blank=True`.
+- **`blank`**
+  - Used for validation at the form level. If set to `True`, it means the field is allowed to be empty when submitting a form. For example, `description` is optional, so it's set as `blank=True`.
 
-2. **`null`**:
-   - Used for database storage. If set to `True`, it allows the field to be stored as `NULL` in the database. In the case of `description`, it can be either blank or null.
+- **`null`**
+  - Used for database storage. If set to `True`, it allows the field to be stored as `NULL` in the database. In the case of `description`, it can be either blank or null.
 
-3. **`unique`**:
-   - Ensures that each value in the field is unique across all entries. This is used for `pid` and `slug` to prevent duplication.
+- **`unique`**:
+  - Ensures that each value in the field is unique across all entries. This is used for `pid` and `slug` to prevent duplication.
 
-4. **`default`**:
-   - Sets a default value for the field if none is provided. For instance, `is_digital` defaults to `False`, and `is_active` defaults to `True`.
+- **`default`**
+  - Sets a default value for the field if none is provided. For instance, `is_digital` defaults to `False`, and `is_active` defaults to `True`.
 
 [⬆️ Go to Context](#context)
 
@@ -280,27 +280,27 @@ erDiagram
 
 - Product Table
 
-    | id  | name   | slug | ... |
-    |-----|--------|------|-----|
-    | 1   | Shoe 1 | ...  | ... |
+  | id  | name   | slug | ... |
+  |-----|--------|------|-----|
+  | 1   | Shoe 1 | ...  | ... |
 
 - Product Line Table
 
-    | id  | price | size | colour |
-    |-----|-------|------|--------|
-    | 1   | 10    | 4    | red    |
-    | 2   | 10    | 5    | blue   |
-    | 3   | 10    | 6    | green  |
+  | id  | price | size | colour |
+  |-----|-------|------|--------|
+  | 1   | 10    | 4    | red    |
+  | 2   | 10    | 5    | blue   |
+  | 3   | 10    | 6    | green  |
 
 - Relationship Table (Product and ProductLine)
 
-    |          | Product  | ProductLine |
-    |----------|----------|-------------|
-    |          | 1        | M           |
-    |          | 1        | 1           |
-    |**Final** | 1        | M           |
+  |          | Product  | ProductLine |
+  |----------|----------|-------------|
+  |          | 1        | M           |
+  |          | 1        | 1           |
+  |**Final** | 1        | M           |
 
-    > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
+  > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
 1. **Product Table** stores basic information about a product (e.g., name, slug).
 2. **Product Line Table** contains variations or detailed information about specific product versions (e.g., price, size, color).
@@ -313,39 +313,63 @@ erDiagram
 
 - Relationship between Product and Category
 
-    |          | Product  | Category    |
-    |----------|----------|-------------|
-    |          | 1        | 1           |
-    |          | M        | 1           |
-    |**Final** | M        | 1           |
+  |          | Product  | Category    |
+  |----------|----------|-------------|
+  |          | 1        | 1           |
+  |          | M        | 1           |
+  |**Final** | M        | 1           |
 
-    > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
+  > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
 - Relationship between Product and SeasonalEvents
 
-    |          | Product  | SeasonalEvents |
-    |----------|----------|----------------|
-    |          | 1        | 1              |
-    |          | M        | 1              |
-    |**Final** | M        | 1              |
+  |          | Product  | SeasonalEvents |
+  |----------|----------|----------------|
+  |          | 1        | 1              |
+  |          | M        | 1              |
+  |**Final** | M        | 1              |
 
-    > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
+  > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
 - Relationship between ProductImage and ProductLine
 
-    |          | ProductImage | ProductLine    |
-    |----------|--------------|----------------|
-    |          | 1            | 1              |
-    |          | M            | 1              |
-    |**Final** | M            | 1              |
+  |          | ProductImage | ProductLine    |
+  |----------|--------------|----------------|
+  |          | 1            | 1              |
+  |          | M            | 1              |
+  |**Final** | M            | 1              |
 
-    > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
+  > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
 [⬆️ Go to Context](#context)
 
 #### Creating Foreign Keys
 
 - Now let's add foreign keys in our model
--
+
+  ```py
+  class ProductModel(models.Model):
+      ...
+      category=models.ForeignKey('CategoryModel',on_delete=models.CASCADE)
+      seasonal_event=models.ForeignKey('SeasonalEventModel',on_delete=models.CASCADE)
+  ```
+
+  - Here one category or one seasonal event can have many products which is one-to-many relationship
+
+  ```py
+  class ProductLineModel(models.Model):
+      ...
+      product=models.ForeignKey(ProductModel,on_delete=models.CASCADE)
+  ```
+
+  - Here one product can have many product lines which is one-to-many relationship
+
+  ```py
+  class ProductImageModel(models.Model):
+      ...
+      product_line=models.ForeignKey(ProductLineModel,on_delete=models.CASCADE)
+  ```
+
+  - Here one product line can have many product images which is one-to-many relationship
 
 [⬆️ Go to Context](#context)
