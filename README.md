@@ -15,6 +15,7 @@
     - [Custom Primary Key](#custom-primary-key)
     - [Making a Relationship](#making-a-relationship)
     - [Creating Foreign Keys](#creating-foreign-keys)
+    - [Self-Referencing Relationships](#self-referencing-relationships)
 
 ### Preparation
 
@@ -281,24 +282,24 @@ erDiagram
 - Product Table
 
   | id  | name   | slug | ... |
-  |-----|--------|------|-----|
+  | --- | ------ | ---- | --- |
   | 1   | Shoe 1 | ...  | ... |
 
 - Product Line Table
 
   | id  | price | size | colour |
-  |-----|-------|------|--------|
+  | --- | ----- | ---- | ------ |
   | 1   | 10    | 4    | red    |
   | 2   | 10    | 5    | blue   |
   | 3   | 10    | 6    | green  |
 
 - Relationship Table (Product and ProductLine)
 
-  |          | Product  | ProductLine |
-  |----------|----------|-------------|
-  |          | 1        | M           |
-  |          | 1        | 1           |
-  |**Final** | 1        | M           |
+  |           | Product | ProductLine |
+  | --------- | ------- | ----------- |
+  |           | 1       | M           |
+  |           | 1       | 1           |
+  | **Final** | 1       | M           |
 
   > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
@@ -313,31 +314,31 @@ erDiagram
 
 - Relationship between Product and Category
 
-  |          | Product  | Category    |
-  |----------|----------|-------------|
-  |          | 1        | 1           |
-  |          | M        | 1           |
-  |**Final** | M        | 1           |
+  |           | Product | Category |
+  | --------- | ------- | -------- |
+  |           | 1       | 1        |
+  |           | M       | 1        |
+  | **Final** | M       | 1        |
 
   > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
 - Relationship between Product and SeasonalEvents
 
-  |          | Product  | SeasonalEvents |
-  |----------|----------|----------------|
-  |          | 1        | 1              |
-  |          | M        | 1              |
-  |**Final** | M        | 1              |
+  |           | Product | SeasonalEvents |
+  | --------- | ------- | -------------- |
+  |           | 1       | 1              |
+  |           | M       | 1              |
+  | **Final** | M       | 1              |
 
   > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
 - Relationship between ProductImage and ProductLine
 
-  |          | ProductImage | ProductLine    |
-  |----------|--------------|----------------|
-  |          | 1            | 1              |
-  |          | M            | 1              |
-  |**Final** | M            | 1              |
+  |           | ProductImage | ProductLine |
+  | --------- | ------------ | ----------- |
+  |           | 1            | 1           |
+  |           | M            | 1           |
+  | **Final** | M            | 1           |
 
   > If any side resolves to many(M) it will be ForeignKey (`OneToMany/ManyToOne`) Relationship
 
@@ -371,5 +372,25 @@ erDiagram
   ```
 
   - Here one product line can have many product images which is one-to-many relationship
+
+[⬆️ Go to Context](#context)
+
+#### Self-Referencing Relationships
+
+- Suppose category has more sub category this is where self-referencing relationship helps
+
+  | id  | name    | slug | parent |
+  | --- | ------- | ---- | ------ |
+  | 1   | clothes | -    | -      |
+  | 2   | shoe    | -    | 1      |
+  | 3   | boots   | -    | 2      |
+
+- In our [models.py](./orm_project/orm_app/models.py) we can define self-referencing in category model
+
+  ```py
+  class CategoryModel(models.Model):
+      ...
+      parent=models.ForeignKey('self',on_delete=models.CASCADE)
+  ```
 
 [⬆️ Go to Context](#context)
