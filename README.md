@@ -16,6 +16,7 @@
     - [Making a Relationship](#making-a-relationship)
     - [Creating Foreign Keys](#creating-foreign-keys)
     - [Self-Referencing Relationships](#self-referencing-relationships)
+    - [Foreign key on\_delete Behavior](#foreign-key-on_delete-behavior)
 
 ### Preparation
 
@@ -392,5 +393,27 @@ erDiagram
       ...
       parent=models.ForeignKey('self',on_delete=models.CASCADE)
   ```
+
+[⬆️ Go to Context](#context)
+
+#### Foreign key on_delete Behavior
+
+- `CASCADE` - Deletes the related object
+  - Delete a blog → deletes its comments
+- `PROTECT` - Prevents deletion by raising `ProtectedError`
+  - If deleting a Category should be blocked if Products use it
+- `RESTRICT` - Similar to PROTECT but smarter in bulk deletes
+  - Avoid deletion if references to exist unless they’re also being deleted via cascade
+- `SET_NULL` - Sets `FK` to `NULL`
+  - On user deletion, set related posts’ author to null
+- `SET_DEFAULT` - Sets `FK` to default value
+  - On user deletion, assign "anonymous" user as default
+- `SET(callable)` - Sets `FK` to value returned by callable
+  - Reassign deleted user to a "sentinel" user
+- `DO_NOTHING` - Does nothing (may lead to `IntegrityError`)
+  - Rare edge cases with custom DB logic
+
+More Details on [Django ForeignKey.on_delete](https://docs.djangoproject.com/en/5.2/ref/models/fields/#django.db.models.ForeignKey.on_delete)
+
 
 [⬆️ Go to Context](#context)
