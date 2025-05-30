@@ -17,6 +17,7 @@
     - [Creating Foreign Keys](#creating-foreign-keys)
     - [Self-Referencing Relationships](#self-referencing-relationships)
     - [Foreign key on\_delete Behavior](#foreign-key-on_delete-behavior)
+    - [Applying on\_delete Behavior on Models](#applying-on_delete-behavior-on-models)
 
 ### Preparation
 
@@ -415,5 +416,49 @@ erDiagram
 
 More Details on [Django ForeignKey.on_delete](https://docs.djangoproject.com/en/5.2/ref/models/fields/#django.db.models.ForeignKey.on_delete)
 
+[⬆️ Go to Context](#context)
+
+#### Applying on_delete Behavior on Models
+
+- Product Model
+
+  ```py
+  class ProductModel(models.Model):
+      ...
+      category=models.ForeignKey('CategoryModel',on_delete=models.SET_NULL,null=True)
+      seasonal_event=models.ForeignKey('SeasonalEventModel',on_delete=models.SET_NULL,null=True)
+  ```
+
+  - Here `category` & `seasonal_event` set to null when category or seasonal_event is deleted it will be shown as null to the assign products
+
+- Product Line Model
+
+  ```py
+  class ProductLineModel(models.Model):
+      ...
+      product=models.ForeignKey(ProductModel,on_delete=models.PROTECT)
+  ```
+
+  - Here On delete is `PROTECT` when a product is deleted product line need to be dealt with otherwise `ProtectedError`
+
+- Product Image Model
+
+  ```py
+  class ProductImageModel(models.Model):
+      ...
+      product_line=models.ForeignKey(ProductLineModel,on_delete=models.CASCADE)
+  ```
+
+  - Here on delete set to `CASCADE` means when prdouct line deleted image will also get deleted
+
+- Category Model
+
+  ```py
+  class CategoryModel(models.Model):
+      ...
+      parent=models.ForeignKey('self',on_delete=models.PROTECT)
+  ```
+
+  - Here parenton delete set to `PROTECT` means when a categry has sub-category it needs to be dealt with that otherwise `ProtectedError`
 
 [⬆️ Go to Context](#context)

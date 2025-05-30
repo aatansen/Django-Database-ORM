@@ -42,8 +42,8 @@ class ProductModel(models.Model):
     def __str__(self):
         return self.name
 
-    category=models.ForeignKey('CategoryModel',on_delete=models.CASCADE)
-    seasonal_event=models.ForeignKey('SeasonalEventModel',on_delete=models.CASCADE)
+    category=models.ForeignKey('CategoryModel',on_delete=models.SET_NULL,null=True)
+    seasonal_event=models.ForeignKey('SeasonalEventModel',on_delete=models.SET_NULL,null=True)
 
 
 class ProductLineModel(models.Model):
@@ -53,7 +53,7 @@ class ProductLineModel(models.Model):
     is_active = models.BooleanField(default=True)
     order = models.IntegerField()
     weight = models.FloatField()
-    product=models.ForeignKey(ProductModel,on_delete=models.CASCADE)
+    product=models.ForeignKey(ProductModel,on_delete=models.PROTECT)
 
 
 class ProductImageModel(models.Model):
@@ -68,7 +68,7 @@ class CategoryModel(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     is_active = models.BooleanField(default=True)
-    parent=models.ForeignKey('self',on_delete=models.CASCADE)
+    parent=models.ForeignKey('self',on_delete=models.PROTECT)
 
 
 class SeasonalEventModel(models.Model):
