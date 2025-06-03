@@ -18,6 +18,7 @@
     - [Self-Referencing Relationships](#self-referencing-relationships)
     - [Foreign key on\_delete Behavior](#foreign-key-on_delete-behavior)
     - [Applying on\_delete Behavior on Models](#applying-on_delete-behavior-on-models)
+    - [Expanding the database design](#expanding-the-database-design)
 
 ### Preparation
 
@@ -460,5 +461,25 @@ More Details on [Django ForeignKey.on_delete](https://docs.djangoproject.com/en/
   ```
 
   - Here parenton delete set to `PROTECT` means when a categry has sub-category it needs to be dealt with that otherwise `ProtectedError`
+
+[⬆️ Go to Context](#context)
+
+#### Expanding the database design
+
+- Attribute Model
+
+  ```py
+  class AttributeModel(models.Model):
+      name=models.CharField(max_length=100)
+      description=models.TextField(null=True)
+  ```
+
+- Product Type Model
+
+  ```py
+  class ProductTypeModel(models.Model):
+      name=models.CharField(max_length=100)
+      parent=models.ForeignKey('self',on_delete=models.CASCADE)
+  ```
 
 [⬆️ Go to Context](#context)

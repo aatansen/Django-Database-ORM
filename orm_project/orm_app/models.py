@@ -75,3 +75,13 @@ class SeasonalEventModel(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     name = models.CharField(max_length=100)
+
+
+class AttributeModel(models.Model):
+    name=models.CharField(max_length=100)
+    description=models.TextField(null=True)
+
+
+class ProductTypeModel(models.Model):
+    name=models.CharField(max_length=100)
+    parent=models.ForeignKey('self',on_delete=models.CASCADE)
