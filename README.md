@@ -460,7 +460,7 @@ More Details on [Django ForeignKey.on_delete](https://docs.djangoproject.com/en/
       parent=models.ForeignKey('self',on_delete=models.PROTECT)
   ```
 
-  - Here parenton delete set to `PROTECT` means when a categry has sub-category it needs to be dealt with that otherwise `ProtectedError`
+  - Here parent on delete set to `PROTECT` means when a category has sub-category it needs to be dealt with that otherwise `ProtectedError`
 
 [⬆️ Go to Context](#context)
 
