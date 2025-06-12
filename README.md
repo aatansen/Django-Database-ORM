@@ -19,6 +19,7 @@
     - [Foreign key on\_delete Behavior](#foreign-key-on_delete-behavior)
     - [Applying on\_delete Behavior on Models](#applying-on_delete-behavior-on-models)
     - [Expanding the database design](#expanding-the-database-design)
+    - [Identifying Many-To-Many Relationships](#identifying-many-to-many-relationships)
 
 ### Preparation
 
@@ -481,5 +482,25 @@ More Details on [Django ForeignKey.on_delete](https://docs.djangoproject.com/en/
       name=models.CharField(max_length=100)
       parent=models.ForeignKey('self',on_delete=models.CASCADE)
   ```
+
+[⬆️ Go to Context](#context)
+
+#### Identifying Many-To-Many Relationships
+
+- ProductLine and Attribute
+
+  |       | ProductLine | Attribute |
+  | ----- | ----------- | --------- |
+  |       | 1           | M         |
+  |       | M           | 1         |
+  | Final | M           | M         |
+
+- Product and ProductType
+
+  |       | Product | ProductType |
+  | ----- | ------- | ----------- |
+  |       | 1       | M           |
+  |       | M       | 1           |
+  | Final | M       | M           |
 
 [⬆️ Go to Context](#context)
