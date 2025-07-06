@@ -20,6 +20,7 @@
     - [Applying on\_delete Behavior on Models](#applying-on_delete-behavior-on-models)
     - [Expanding the database design](#expanding-the-database-design)
     - [Identifying Many-To-Many Relationships](#identifying-many-to-many-relationships)
+    - [Creating A Default Many-To-Many Relationship](#creating-a-default-many-to-many-relationship)
 
 ### Preparation
 
@@ -502,5 +503,62 @@ More Details on [Django ForeignKey.on_delete](https://docs.djangoproject.com/en/
   |       | 1       | M           |
   |       | M       | 1           |
   | Final | M       | M           |
+
+[⬆️ Go to Context](#context)
+
+#### Creating A Default Many-To-Many Relationship
+
+- A Many-To-Many Field does not create a direct column in the model’s table during migration.
+- Instead, Django automatically creates an additional link table to represent the many-to-many relationship.
+- This link table contains foreign keys referencing the primary keys of both related models.
+- Creating `ProductModel` and `ProductTypeModel` many-to-many relationship
+
+  ```py
+  class ProductModel(models.Model):
+      ...
+      product_type=models.ManyToManyField('ProductTypeModel',related_name='product_type')
+  ```
+
+  ```py
+  class ProductTypeModel(models.Model):
+      name=models.CharField(max_length=100)
+      parent=models.ForeignKey('self',on_delete=models.CASCADE)
+  ```
+
+- Creating `ProductLineModel` and `ProductTypeModel` many-to-many relationship
+
+  ```py
+  class ProductLineModel(models.Model):
+      ...
+      attribute=models.ManyToManyField('AttributeModel',related_name='attribute')
+  ```
+
+  ```py
+  class AttributeModel(models.Model):
+      name=models.CharField(max_length=100)
+      description=models.TextField(null=True)
+  ```
+
+- We get this when migration is done
+
+  - Table: **product_line**
+
+    | id  | price |
+    | --- | ----- |
+    | 1   | 10    |
+    | 2   | 10    |
+    | 3   | 10    |
+
+  - Table: **attribute**
+
+    | id  | name  |
+    | --- | ----- |
+    | 1   | color |
+
+  - Table: **product_line_attribute** *(reference link table)*
+
+    | id  | pl_fk | att_fk |
+    | --- | ----- | ------ |
+    | 1   | 1     | 1      |
 
 [⬆️ Go to Context](#context)
