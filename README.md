@@ -525,7 +525,7 @@ More Details on [Django ForeignKey.on_delete](https://docs.djangoproject.com/en/
       parent=models.ForeignKey('self',on_delete=models.CASCADE)
   ```
 
-- Creating `ProductLineModel` and `ProductTypeModel` many-to-many relationship
+- Creating `ProductLineModel` and `AttributeModel` many-to-many relationship
 
   ```py
   class ProductLineModel(models.Model):
